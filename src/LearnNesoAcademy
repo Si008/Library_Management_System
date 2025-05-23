@@ -1,0 +1,21 @@
+import java.util.*;
+import java.util.Scanner;
+class San {
+    public static void main(String[] args) {
+        Scanner inp = new Scanner(System.in);
+        System.out.println("Enter the number of elements in asn array : ");
+        int n = inp.nextInt();  // Getting number of elements in an array.
+        if (n > 0 && n <= 20) {
+            Point[] points = new Point(int x, int y);
+            for (int i = 0; i <=n-1; i++) {
+                int m = inp.nextInt();
+                int l = inp.nextInt();
+                Points(x,y) = (m,l);
+            }
+            System.out.println(Arrays.toString(points));
+
+        } else
+            System.out.println("Enter the number of elements between 1 and 20");
+        inp.close();
+    }
+}
