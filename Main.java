@@ -2,6 +2,7 @@ package Librarymanagementsystem;
 
 
 
+import java.awt.print.Book;
 import java.util.Date;
 import java.util.*;
 import java.sql.*;
@@ -9,8 +10,9 @@ import java.sql.*;
 
 class Main {
     public static void main(String[] args) throws ClassCastException {
-       Library lib = new Library();
-       lib.addBook();
+       BooksDAO booksDAO = new BooksDAO();
+        booksDAO.getBookDetails("Think");
+
 
 
 

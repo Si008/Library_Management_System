@@ -4,7 +4,7 @@ package Librarymanagementsystem;
 import java.sql.*;
 
 public class BooksDAO {
-    public Books getBookDetails(String name )  {
+    public void getBookDetails(String name )  {
         String query = "Select * from books where Title = ? " ;
 
         Books book = null;
@@ -25,7 +25,11 @@ public class BooksDAO {
             e.printStackTrace();
         }
 
-        return book ;
+        System.out.println( "Book title : " + book.title + "\n"
+                             + "Book id : " + book.bookid +" \n"
+                             + "Book Genre :" + book.genre + "\n"
+                             + "Book created :" + book.bookcreated + "\n"
+                             + "Book isIssued :" +book.isIssued);
     }
 
 
