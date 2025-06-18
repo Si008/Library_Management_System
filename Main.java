@@ -10,11 +10,8 @@ import java.sql.*;
 
 class Main {
     public static void main(String[] args) throws ClassCastException {
-       BooksDAO booksDAO = new BooksDAO();
-        booksDAO.getBookDetails("Think");
-
-
-
+       Library lib= new Library();
+       lib.issueBook("Sanjay","Mar");
 
     }
 }

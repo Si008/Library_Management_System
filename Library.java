@@ -10,7 +10,9 @@ import java.util.Date;
 
 // Library class
 public class Library {
-    private List<Books> books = new ArrayList<>();
+//    private List<Books> books = new ArrayList<>();
+    UserDAO userdao = new UserDAO();
+    BooksDAO booksdao = new BooksDAO();
     Scanner inp = new Scanner(System.in);
 
 //    Library(Book b) {
@@ -74,36 +76,63 @@ public class Library {
 //        }
     }
 
-    public void issueBook(User user, Books b) {
-        for (Books book : books) {
-            if (book.bookid.equals(b.bookid)) {
-                if (book.isIssued) {
-                    System.out.println(" Book " + book.title + " is already issued.");
-                    return;
-                }
-                if (user.borrowedBooks.size() >= user.getMaxBooksAllowed()) {
-                    System.out.println(user.name + " has reached the borrow limit (" + user.getMaxBooksAllowed() + ").");
-                    return;
-                }
-                // Issue the book
-                book.isIssued = true;
-//                book.dateIssued = new Date();
-                user.borrowBook(book);
-                System.out.println("Issued on: " + book.dateIssued);
-                return;
-            }
+    // Constraints cant be used for duplicate users.
+
+    public void issueBook( String name , String book_name) {
+        User user = userdao.getUser(name);
+        Books book = booksdao.getBookDetails(book_name);
+
+        if(user == null || book == null ) {
+            System.out.println("User or Book is not found");
+            return;
         }
-        System.out.println("Book not found in library.");
-    }
-    public void returnBook(Books b , User user){
-        if(user.borrowedBooks.contains(b)){
-//            addBook(b);
-//            System.out.println(user.name + " returned " + b.title + " on " + new Date());
-            b.isIssued = false;
-            user.borrowedBooks.remove(b);
+
+        if(book.isIssued) {
+            System.out.println("Book " + book.title + " is already issued ");
+            return;
         }
-        else
-            System.out.println("The user didn't issued that book");
+
+        String userid = (user instanceof  Student)? ((Student)user).stdid : ((user instanceof Teacher)? ((Teacher)user).teaid : "Unknown");
+
+
+        if(user.getMaxBooksAllowed() < userdao.getCountOfUserBorrowedBooks(userid) ){
+            System.out.println("User :"+ user.name + " has reached the borrow limits");
+            return ;
+        }
+
+        try(Connection conn = DBconnection.getConnection()){
+
+            String sql1 = "Update books set Isissued = ? where Book_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql1);
+            ps.setBoolean(1,true);
+            ps.setString(2,book.bookid);
+             ps.executeUpdate();
+
+             String sql2 ="Insert into borrowed_books(user_id,book_id,date_issued) values (?,?,?)";
+             PreparedStatement ps1 = conn.prepareStatement(sql2);
+             ps1.setString(1,userid);
+             ps1.setString(2,book.bookid);
+             java.sql.Date  date =  new java.sql.Date( new java.util.Date().getTime());
+             ps1.setDate(3,date);
+             int rows = ps1.executeUpdate();
+            System.out.println("Rows updated : " + rows);
+
+            System.out.println("Book :" + book.title + " is borrowed to User :" + user.name );
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
     }
+
+//    public void returnBook(Books b , User user){
+//        if(user.borrowedBooks.contains(b)){
+////            addBook(b);
+////            System.out.println(user.name + " returned " + b.title + " on " + new Date());
+//            b.isIssued = false;
+//            user.borrowedBooks.remove(b);
+//        }
+//        else
+//            System.out.println("The user didn't issued that book");
+//    }
 }
 

@@ -9,7 +9,7 @@ public class User {
         protected  String name;
         protected  String dept;
         protected  String ph_no;
-        protected List<Books> borrowedBooks = new ArrayList<>();
+//        protected List<Books> borrowedBooks = new ArrayList<>();
 
         User(String name, String dept, String ph_no) {
             this.name = name;
@@ -40,12 +40,12 @@ public class User {
             return 0; // To be overridden
         }
 
-        public void borrowBook(Books book) {
-            borrowedBooks.add(book);
+//        public void borrowBook(Books book) {
+//            borrowedBooks.add(book);
 //        System.out.println(name + " borrowed: " + book.title + " on " + new Date());
         }
 
-    }
+
 
 
 

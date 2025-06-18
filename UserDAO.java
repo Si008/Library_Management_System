@@ -90,4 +90,24 @@ public class UserDAO {
               }
             return user ;
           }
+
+          public int getCountOfUserBorrowedBooks(String user_id){
+              String query = "Select count(book_id) from borrowed_books where user_id = ?";
+                int count = 0 ;
+
+              try{
+                  Connection conn = DBconnection.getConnection();
+                  PreparedStatement ps = conn.prepareStatement(query);
+                  ps.setString(1,user_id);
+                  ResultSet rs = ps.executeQuery();
+                  if(rs.next())
+                      count = rs.getInt(1);
+              }
+              catch(SQLException e){
+                  e.printStackTrace();
+              }
+              return count ;
+
+          }
+
 }
