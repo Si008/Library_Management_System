@@ -10,9 +10,62 @@ import java.sql.*;
 
 class Main {
     public static void main(String[] args) throws ClassCastException {
-       Library lib= new Library();
-       lib.issueBook("Sanjay","Mar");
+        Scanner inp = new Scanner(System.in);
+        Library lib = new Library();
+        UserDAO userdao = new UserDAO();
 
+        System.out.println("Enter the type of user (New/Old) : ");
+        String type = inp.next();
+        if (type.equalsIgnoreCase("new")) {
+            userdao.newUser();
+            System.out.println("Want to show available books? (yes/no) :");
+            String m = inp.next();
+            if (m.equalsIgnoreCase("yes"))
+                lib.showAvailableBooks();
+            System.out.println("Want to get books ? (Yes/No)");
+            String m1 = inp.next();
+            inp.nextLine();
+            if (m1.equalsIgnoreCase("Yes")) {
+                System.out.println("Enter your Name : ");
+                String username = inp.nextLine() ;
+
+                System.out.println("Enter the Book name : ");
+                String bookName = inp.nextLine();
+
+                lib.issueBook(username, bookName);
+
+            }
+            System.out.println("Successfully completed the process !");
+
+        } else {
+            System.out.println("Your count of issued books :");
+            System.out.print("Enter your user id :");
+            int count =userdao.getCountOfUserBorrowedBooks(inp.nextLine());
+            inp.nextLine();
+            System.out.println(count);
+
+
+            System.out.println("Want to show available books? (yes/no)");
+            String m2 = inp.next();
+            if (m2.equalsIgnoreCase("yes"))
+                lib.showAvailableBooks();
+            System.out.println("Want to get books ? (Yes/No)");
+            String m3 = inp.next();
+            inp.nextLine();
+            if (m3.equalsIgnoreCase("Yes")) {
+                System.out.println("Enter your Name : ");
+                String username = inp.nextLine() ;
+
+                System.out.println("Enter the Book name : ");
+                String bookName = inp.nextLine();
+
+                lib.issueBook( username,  bookName );
+                inp.close();
+
+            }
+
+
+        }
     }
 }
 

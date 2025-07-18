@@ -10,14 +10,12 @@ import java.util.Date;
 
 // Library class
 public class Library {
-//    private List<Books> books = new ArrayList<>();
+
     UserDAO userdao = new UserDAO();
     BooksDAO booksdao = new BooksDAO();
     Scanner inp = new Scanner(System.in);
 
-//    Library(Book b) {
-//        books.add(b);
-//    }
+
 
     public void addBook() {
         String sql = "INSERT into books (Book_id,Title,Genre,Bookcreated,Isissued) values (?,?,?,?,?)";
@@ -38,7 +36,6 @@ public class Library {
             ps.setString(3,inp.nextLine());
 
 
-//            java.sql.Date sqldate = new java.sql.Date(b.bookcreated.getTime());
 
             java.sql.Date sqldate  =  new java.sql.Date(date.getTime());
             ps.setDate(4,sqldate);
@@ -69,11 +66,6 @@ public class Library {
             e.printStackTrace();
         }
 
-//        for (Books book : books) {
-//            if (!book.isIssued) {
-//                System.out.println(book.title + " | " + book.genre);
-//            }
-//        }
     }
 
     // Constraints cant be used for duplicate users.
@@ -124,10 +116,14 @@ public class Library {
         }
     }
 
+//    public void returnBook( String ){
+
+
+
 //    public void returnBook(Books b , User user){
 //        if(user.borrowedBooks.contains(b)){
-////            addBook(b);
-////            System.out.println(user.name + " returned " + b.title + " on " + new Date());
+//            addBook(b);
+//            System.out.println(user.name + " returned " + b.title + " on " + new Date());
 //            b.isIssued = false;
 //            user.borrowedBooks.remove(b);
 //        }
@@ -135,4 +131,68 @@ public class Library {
 //            System.out.println("The user didn't issued that book");
 //    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
