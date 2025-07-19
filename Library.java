@@ -8,12 +8,36 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Date;
 
-// Library class
+// Library class (BooksDAO)
 public class Library {
 
     UserDAO userdao = new UserDAO();
-    BooksDAO booksdao = new BooksDAO();
     Scanner inp = new Scanner(System.in);
+
+
+
+        public Books getBookDetails(String name )  {
+            String query = "Select * from books where Title = ? " ;
+
+            Books book = null;
+
+            try {
+                Connection conn = DBconnection.getConnection();
+                PreparedStatement ps = conn.prepareStatement(query);
+                ps.setString(1, name);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()){
+                    book = new Books(rs.getString("Book_id"),rs.getString("Title"),rs.getString("Genre"));
+                    book.bookcreated = rs.getTimestamp("Bookcreated");
+                    book.isIssued = rs.getBoolean("Isissued");
+                }
+                rs.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return book ;
+        }
 
 
 
@@ -115,21 +139,7 @@ public class Library {
             e.printStackTrace();
         }
     }
-
-//    public void returnBook( String ){
-
-
-
-//    public void returnBook(Books b , User user){
-//        if(user.borrowedBooks.contains(b)){
-//            addBook(b);
-//            System.out.println(user.name + " returned " + b.title + " on " + new Date());
-//            b.isIssued = false;
-//            user.borrowedBooks.remove(b);
-//        }
-//        else
-//            System.out.println("The user didn't issued that book");
-//    }
+    
 }
 
 
