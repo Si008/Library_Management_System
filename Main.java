@@ -40,7 +40,7 @@ class Main {
         } else {
             System.out.println("Your count of issued books :");
             System.out.print("Enter your user id :");
-            int count =userdao.getCountOfUserBorrowedBooks(inp.nextLine());
+            int count =userdao.getCountOfUserBorrowedBooks(inp.next());
             inp.nextLine();
             System.out.println(count);
 
@@ -66,6 +66,8 @@ class Main {
 
 
         }
+
+
     }
 }
 
