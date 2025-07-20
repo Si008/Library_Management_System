@@ -9,20 +9,21 @@ import java.util.Date;
 // Library class (BooksDAO)
 public class Library {
 
-    UserDAO userdao = new UserDAO();
+    UserDAO userdao = null;
+    Library lib = null;
     Scanner inp = new Scanner(System.in);
 
 
 
-        public Books getBookDetails(String name )  {
-            String query = "Select * from books where Title = ? " ;
+        public Books getBookDetails(String bookId )  {
+            String query = "Select * from books where Book_id = ? " ;
 
             Books book = null;
 
             try {
                 Connection conn = DBconnection.getConnection();
                 PreparedStatement ps = conn.prepareStatement(query);
-                ps.setString(1, name);
+                ps.setString(1, bookId);
                 ResultSet rs = ps.executeQuery();
 
                 if (rs.next()){
@@ -92,9 +93,11 @@ public class Library {
 
     // Constraints cant be used for duplicate users.
 
-    public void issueBook( String name , String book_name) {
+    public void issueBook( String name , String bookId) {
+            lib = new Library();
+            userdao = new UserDAO();
         User user = userdao.getUser(name);
-        Books book = booksdao.getBookDetails(book_name);
+        Books book = lib.getBookDetails(bookId);
 
         if(user == null || book == null ) {
             System.out.println("User or Book is not found");
@@ -109,7 +112,7 @@ public class Library {
         String userid = (user instanceof  Student)? ((Student)user).stdid : ((user instanceof Teacher)? ((Teacher)user).teaid : "Unknown");
 
 
-        if(user.getMaxBooksAllowed() < userdao.getCountOfUserBorrowedBooks(userid) ){
+        if(user.getMaxBooksAllowed() <= userdao.getCountOfUserBorrowedBooks(userid) ){
             System.out.println("User :"+ user.name + " has reached the borrow limits");
             return ;
         }
@@ -138,6 +141,39 @@ public class Library {
         }
     }
 
+    public void returnBook(String userId , String bookId){
+        String query1 = "Delete from Borrowed_books  where user_Id = ?  and book_id = ?" ;
+        String query2 = "update books set isIssued = ? where Book_id = ?";
+
+        try (Connection conn = DBconnection.getConnection()) {
+
+            try {
+                PreparedStatement ps = conn.prepareStatement(query1);
+                ps.setString(1,userId);
+                ps.setString(2,bookId);
+                ps.executeUpdate();
+            }
+            catch (SQLException e){
+                e.printStackTrace();
+            }
+
+            try {
+                PreparedStatement ps = conn.prepareStatement(query2);
+                ps.setBoolean(1, false);
+                ps.setString(2,bookId);
+
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("The book " + "bookId" + "is returned to library by " + userId);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
 
 
